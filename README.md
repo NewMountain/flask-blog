@@ -1,6 +1,4 @@
 # flask-blog
 flask-blog
 
-Testing!
-
-Testing 1..2..3
+This is my first Python GitHub repo for a test blog app in Flask. This is a proof of concept using Python and Flask. This should be exciting and fun!

@@ -47,6 +47,22 @@ def login():
 			return redirect(url_for('main'))
 	return render_template('login.html', error=error)
 
+@app.route('/add', methods=['POST'])
+@login_required
+def add():
+	title = request.form['title']
+	post = request.form['post']
+	if not title or not post:
+		flash("All fields are required. Please try again.")
+		return redirect(url_for('main'))
+	else:
+		g.db = connect_db()
+		g.db.execute('insert into posts (title,post) values (?,?)',
+			[request.form['title'], request.form['post']])
+		g.db.commit()
+		g.db.close()
+		return redirect(url_for('main'))
+
 @app.route('/main')
 @login_required
 def main():

@@ -7,7 +7,8 @@ from flask import Flask, render_template, request, session, \
 import sqlite3
 from functools import wraps
 
-#Configuration
+
+# configuration
 DATABASE = 'blog.db'
 USERNAME = 'admin'
 PASSWORD = 'admin'
@@ -15,12 +16,14 @@ SECRET_KEY = ';\xf2\xed\x81\xd9\xe0\xe8\xf2<L-\xc5\xb7\xd10\x98\x85v\x93/V\x10\\
 
 app = Flask(__name__)
 
-#Uses uppercase to look for app configuration
+# pulls in configurations by looking for UPPERCASE variables
 app.config.from_object(__name__)
 
-#Function to connect to database
+
+# function used for connecting to the database
 def connect_db():
-	return sqlite3.connection(app.config['DATABASE_PATH'])
+    return sqlite3.connect(app.config['DATABASE'])
+
 
 def login_required(test):
 	@wraps(test)
@@ -47,7 +50,11 @@ def login():
 @app.route('/main')
 @login_required
 def main():
-	return render_template('main.html')
+	g.db = connect_db()
+	cur = g.db.execute('select * from posts')
+	posts = [dict(title=row[0], post=row[1]) for row in cur.fetchall()]
+	g.db.close()
+	return render_template('main.html', posts=posts)
 
 @app.route('/logout')
 def logout():

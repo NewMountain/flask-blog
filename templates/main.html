@@ -2,5 +2,13 @@
 {% block content %}
 	<h2>Welcome to the First Page - sort of like hello world!</h2>
 	<p><a href="/logout">Logout!</a></p>
+	<br />
+	<br />
+	<h3>Posts:</h3>
+	{% for p in posts %}
+		<strong>Title:</strong> {{ p.title }}
+		<strong>Post:</strong> {{ p.title }}
+		<br />
+	{% endfor %}
 {% endblock %}
 
